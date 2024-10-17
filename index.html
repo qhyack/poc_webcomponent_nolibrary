@@ -28,9 +28,13 @@
             --spacing-lg: 12px;
         }
     </style>
-    <script defer>
-        // load src/main.html, select all script and import them , select style and import them, and take innerHTML of app and put it in body
-        fetch('/src/main.html')
+    <script>
+
+        const CONST = {
+            BASE_URL: '/src'
+        };
+
+        const load = (src) => fetch(`${CONST.BASE_URL}${src}.html`)
             .then(response => response.text())
             .then(html => {
                 document.querySelectorAll('.imported').forEach(element => element.remove());
@@ -60,6 +64,23 @@
                 document.body.innerHTML = app.innerHTML;
             });
 
+
+        load(`/main`);
+        window.addEventListener('popstate', (event) => {
+            const state = event.state;
+            const uri_path = window.location.pathname;
+            console.log({ state, uri_path });
+            let src = "/404"
+            switch (uri_path) {
+                case "/":
+                    src = "/main";
+                    break;
+                case "/call":
+                    src = "/call";
+                    break;
+            }
+            load(src);
+        });
     </script>
 </head>
 

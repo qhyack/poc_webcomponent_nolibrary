@@ -8,8 +8,11 @@
     let count = 0;
 
     function handle() {
-        console.log({ 'count': count++ });
+        count++;
+        console.log({ count });
         document.querySelector('call-button').setAttribute('value', count);
+        history.pushState({ count }, '', '/call');
+        { history.pushState({}, '', ''); history.back(); }
     }
 </script>
 
