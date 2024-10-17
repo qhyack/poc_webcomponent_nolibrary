@@ -31,10 +31,10 @@
     <script>
 
         const CONST = {
-            BASE_URL: '/src'
+            BASE_URL: '/src',
         };
 
-        const load = (src) => fetch(`${CONST.BASE_URL}${src}.html`)
+        const load = (src, state = {}) => fetch(`${CONST.BASE_URL}${src}.html`)
             .then(response => response.text())
             .then(html => {
                 document.querySelectorAll('.imported').forEach(element => element.remove());
@@ -42,9 +42,16 @@
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
 
+                const stateScript = document.createElement('script');
+                stateScript.innerHTML = `state = ${JSON.stringify(state)};`;
+                stateScript.classList.add('imported');
+                document.head.appendChild(stateScript);
+
                 const scripts = doc.querySelectorAll('script');
                 scripts.forEach(script => {
                     const newScript = document.createElement('script');
+                    if (script.hasAttribute('defer'))
+                        newScript.defer = true;
                     if (script.src)
                         newScript.src = script.src;
                     newScript.innerHTML = `{${script.innerHTML}}`;
@@ -62,10 +69,12 @@
 
                 const app = doc.querySelector('app');
                 document.body.innerHTML = app.innerHTML;
+
+                window.dispatchEvent(new Event('load'));
             });
 
 
-        load(`/main`);
+        load(`/home`);
         window.addEventListener('popstate', (event) => {
             const state = event.state;
             const uri_path = window.location.pathname;
@@ -73,13 +82,16 @@
             let src = "/404"
             switch (uri_path) {
                 case "/":
-                    src = "/main";
+                case "/home":
+                case "/index":
+                case "/index.html":
+                    src = "/home";
                     break;
                 case "/call":
                     src = "/call";
                     break;
             }
-            load(src);
+            load(src, state);
         });
     </script>
 </head>

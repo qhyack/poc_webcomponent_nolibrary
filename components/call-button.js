@@ -7,9 +7,10 @@ if (!customElements.get("call-button"))
             });
 
             const render = () => {
-                const val = parseInt(this.getAttribute("value") ?? 0);
+                const val = this.getAttribute("value") ?? 0;
+                const intval = parseInt(this.getAttribute("value") ?? 0);
 
-                const background = val < 10 ? `background: var(--color-primary);` : `background: var(--color-danger);`;
+                const background = intval < 10 ? `background: var(--color-primary);` : `background: var(--color-danger);`;
 
                 shadowRoot.innerHTML = `
             <style>
@@ -26,8 +27,10 @@ if (!customElements.get("call-button"))
                 button.onclick = () => {
                     const ontap = this.getAttribute('ontap');
                     if (ontap) {
-                        new Function(ontap).call(this);
-                        render();
+                        const f = new Function("render", ontap);
+                        f.apply(this, [() => {
+                            render();
+                        }]);
                     }
                 };
             };

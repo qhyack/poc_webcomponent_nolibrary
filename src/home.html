@@ -1,0 +1,51 @@
+<script src="/components/layout.js" defer></script>
+<script src="/components/clock-digital.js" defer></script>
+<script src="/components/incremental-button.js" defer></script>
+<script src="/components/more-minus.js" defer></script>
+<script src="/components/call-button.js" defer></script>
+
+<script>
+    let count = 5;
+
+    let isHandling = false;
+    function handle(render) {
+        if (!isHandling) {
+            isHandling = true;
+            const countdown = () => {
+                document.querySelector('call-button').setAttribute('value', "Redirecting in " + count + " seconds");
+                if (count < 0) {
+                    history.pushState({ "count": 1000 }, '', '/call');
+                    { history.pushState({}, '', ''); history.back(); }
+                    isHandling = false;
+                    return;
+                }
+                count--;
+                render();
+                setTimeout(countdown, 1000);
+            }
+            countdown();
+        }
+        render();
+    }
+</script>
+
+<style>
+    clock-digital {
+        border-radius: 5px;
+    }
+</style>
+
+<app>
+    <layout-row style="
+        justify-content: space-between;
+        gap: 50px;
+        background-color: grey;
+        ">
+        <clock-digital></clock-digital>
+        <incremental-button></incremental-button>
+        <call-button ontap="handle(render)"></call-button>
+        <layout-column>
+            <more-minus></more-minus>
+        </layout-column>
+    </layout-row>
+</app>
