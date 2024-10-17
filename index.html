@@ -28,42 +28,38 @@
             --spacing-lg: 12px;
         }
     </style>
-    <script src="components\layout.js" defer></script>
-    <script src="components\clock-digital.js" defer></script>
-    <script src="components\incremental-button.js" defer></script>
-    <script src="components\more-minus.js" defer></script>
-    <script src="components\call-button.js" defer></script>
+    <script defer>
+        // load src/main.html, select all script and import them , select style and import them, and take innerHTML of app and put it in body
+        fetch('/src/main.html')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
 
-    <script>
-        let count = 0;
+                const scripts = doc.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    if (script.src)
+                        newScript.src = script.src;
+                    newScript.innerHTML = script.innerHTML;
+                    document.head.appendChild(newScript);
+                });
 
-        function handle() {
-            console.log({ 'count': count++ });
-            document.querySelector('call-button').setAttribute('value', count);
-        }
+                const styles = doc.querySelectorAll('style');
+                styles.forEach(style => {
+                    const newStyle = document.createElement('style');
+                    newStyle.innerHTML = style.innerHTML;
+                    document.head.appendChild(newStyle);
+                });
+
+                const app = doc.querySelector('app');
+                document.body.innerHTML = app.innerHTML;
+            });
+
     </script>
-    <style>
-        clock-digital {
-            border-radius: 5px;
-        }
-    </style>
-
 </head>
 
 <body>
-    <layout-row style="
-        justify-content: space-between;
-        gap: 50px;
-        background-color: grey;
-        ">
-        <clock-digital></clock-digital>
-        <incremental-button></incremental-button>
-        <call-button ontap="handle()"></call-button>
-        <layout-column>
-            <more-minus></more-minus>
-        </layout-column>
-    </layout-row>
 </body>
-
 
 </html>
