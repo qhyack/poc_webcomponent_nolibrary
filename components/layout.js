@@ -1,12 +1,13 @@
-customElements.define("layout-column", class extends HTMLElement {
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({
-            mode: 'open'
-        });
+if (!customElements.get("layout-column"))
+    customElements.define("layout-column", class extends HTMLElement {
+        constructor() {
+            super();
+            const shadowRoot = this.attachShadow({
+                mode: 'open'
+            });
 
-        function render() {
-            shadowRoot.innerHTML = /*html*/ `
+            function render() {
+                shadowRoot.innerHTML = /*html*/ `
 <style>
     :host {
         display: flex;
@@ -18,20 +19,21 @@ customElements.define("layout-column", class extends HTMLElement {
 </style>
 <slot></slot>
 `;
-        };
-        render();
-    }
-});
+            };
+            render();
+        }
+    });
 
-customElements.define("layout-row", class extends HTMLElement {
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({
-            mode: 'open'
-        });
+if (!customElements.get("layout-row"))
+    customElements.define("layout-row", class extends HTMLElement {
+        constructor() {
+            super();
+            const shadowRoot = this.attachShadow({
+                mode: 'open'
+            });
 
-        function render() {
-            shadowRoot.innerHTML = /*html*/ `
+            function render() {
+                shadowRoot.innerHTML = /*html*/ `
 <style>
     :host {
         display: flex;
@@ -43,7 +45,7 @@ customElements.define("layout-row", class extends HTMLElement {
 </style>
 <slot></slot>
 `;
-        };
-        render();
-    }
-});
+            };
+            render();
+        }
+    });

@@ -37,3 +37,8 @@ This project demonstrates the use of web component in vanilla web development. T
 ## Author
 
 - HENRY Quentin
+
+
+## TODO
+
+- Create template for components

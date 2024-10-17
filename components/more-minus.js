@@ -1,14 +1,15 @@
-customElements.define("more-minus", class extends HTMLElement {
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({
-            mode: 'open'
-        });
+if (!customElements.get("more-minus"))
+    customElements.define("more-minus", class extends HTMLElement {
+        constructor() {
+            super();
+            const shadowRoot = this.attachShadow({
+                mode: 'open'
+            });
 
-        let count = 0;
+            let count = 0;
 
-        const render = () => {
-            shadowRoot.innerHTML = /*html*/ `
+            const render = () => {
+                shadowRoot.innerHTML = /*html*/ `
 <style>
     :host {
         display: inline-block;
@@ -31,17 +32,17 @@ customElements.define("more-minus", class extends HTMLElement {
     </layout-row>
 </layout-column>`;
 
-            shadowRoot.getElementById('decrement').addEventListener('click', () => {
-                count--;
-                render();
-            });
+                shadowRoot.getElementById('decrement').addEventListener('click', () => {
+                    count--;
+                    render();
+                });
 
-            shadowRoot.getElementById('increment').addEventListener('click', () => {
-                count++;
-                render();
-            });
-        };
+                shadowRoot.getElementById('increment').addEventListener('click', () => {
+                    count++;
+                    render();
+                });
+            };
 
-        render();
-    }
-});
+            render();
+        }
+    });
