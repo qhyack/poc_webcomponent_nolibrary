@@ -33,6 +33,8 @@
         fetch('/src/main.html')
             .then(response => response.text())
             .then(html => {
+                document.querySelectorAll('.imported').forEach(element => element.remove());
+
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
 
@@ -41,7 +43,8 @@
                     const newScript = document.createElement('script');
                     if (script.src)
                         newScript.src = script.src;
-                    newScript.innerHTML = script.innerHTML;
+                    newScript.innerHTML = `{${script.innerHTML}}`;
+                    newScript.classList.add('imported');
                     document.head.appendChild(newScript);
                 });
 
@@ -49,6 +52,7 @@
                 styles.forEach(style => {
                     const newStyle = document.createElement('style');
                     newStyle.innerHTML = style.innerHTML;
+                    newStyle.classList.add('imported');
                     document.head.appendChild(newStyle);
                 });
 
