@@ -1,31 +1,43 @@
 <script src="/components/layout.js" defer></script>
 <script src="/components/clock-digital.js" defer></script>
-<script src="/components/incremental-button.js" defer></script>
-<script src="/components/more-minus.js" defer></script>
-<script src="/components/call-button.js" defer></script>
+<script src="/components/logic-component.js" defer></script>
 
 <script>
-    let count = 5;
+    const badControllerRefs = [];
 
-    let isHandling = false;
-    function handle(render) {
-        if (!isHandling) {
-            isHandling = true;
-            const countdown = () => {
-                document.querySelector('call-button').setAttribute('value', "Redirecting in " + count + " seconds");
-                if (count < 0) {
-                    history.pushState({ "count": 1000 }, '', '/call');
-                    { history.pushState({}, '', ''); history.back(); }
-                    isHandling = false;
-                    return;
-                }
-                count--;
-                render();
-                setTimeout(countdown, 1000);
+    function register_click(ref) {
+        const { useValue: { value, setValue } } = ref;
+        badControllerRefs.push(ref);
+
+        ref.addEventListener('click', () => {
+            const val = Math.floor(Math.random() * 100);
+            if (val % 2 === 0) {
+                ref.setAttribute('variant', 'success');
+            } else {
+                ref.setAttribute('variant', 'danger');
             }
-            countdown();
-        }
-        render();
+            setValue(val);
+        });
+    }
+
+    function register_interval(ref) {
+        const { useValue: { value, setValue } } = ref;
+        badControllerRefs.push(ref);
+
+        let i = 0;
+        setInterval(() => {
+            i++;
+            setValue(`${i} seconds`);
+        }, 1000);
+    }
+
+    function register_bad(ref) {
+        const { useValue: { value, setValue } } = ref;
+        ref.addEventListener('click', () => {
+            badControllerRefs.forEach(ref => {
+                ref.useValue.setValue('BAD');
+            });
+        });
     }
 </script>
 
@@ -37,15 +49,12 @@
 
 <app>
     <layout-row style="
-        justify-content: space-between;
-        gap: 50px;
-        background-color: grey;
+        justify-content: center;
+        gap: 10%;
         ">
         <clock-digital></clock-digital>
-        <incremental-button></incremental-button>
-        <call-button ontap="handle(render)"></call-button>
-        <layout-column>
-            <more-minus></more-minus>
-        </layout-column>
+        <logic-component variant="warning" value="0" oninit="register_interval(ref)"></logic-component>
+        <logic-component value="HEY" oninit="register_click(ref)"></logic-component>
+        <logic-component value="Bad Controller" oninit="register_bad(ref)"></logic-component>
     </layout-row>
 </app>
