@@ -1,0 +1,19 @@
+<script src="/components/statefull.js" defer></script>
+<script>
+    function bind(ref) {
+        const { setData, data } = ref;
+
+        setClock = () => {
+            const date = new Date();
+            setData({clock: date.toLocaleTimeString()});
+        }
+
+        setClock(); // Set the initial time
+        setInterval(setClock, interval = 1000);
+    }
+</script>
+<statefull-component oninit="bind(ref)">
+    <template>
+        <p><bind id="clock">CLOCK</bind></p>
+    </template>
+</statefull-component>

@@ -1,12 +1,12 @@
 <script>
-    let { count = 0, _ } = state;
-
     window.addEventListener('load', () => {
-        document.querySelector('data#count').innerText = count;
-    });
+        let { count = 0 } = window.pageState ?? {};
+
+        document.querySelector('bind#count').innerText = count;
+    }, { once: true });
 </script>
 
 <app>
     <h1>Call Page</h1>
-    <p>Count: <data id="count"></data></p>
+    <p>Count: <bind id="count"></data></p>
 </app>
